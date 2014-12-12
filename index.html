@@ -70,7 +70,8 @@
                     <p ng-if="comments.length == 0">No comments yet. Be the first to review this!</p>
                     <div ng-repeat="comment in comments | orderBy: '-score'">
                         <rating ng-model="comment.rating" readonly="!comment.done"></rating>
-                        <h3>{{comment.title}}: A Review by {{comment.name}}</h3>
+                        <h3>{{comment.title}}</h3>
+                        <p>by {{comment.name}}</p>
                         <p>{{comment.body}}</p>
                         <div>
                             {{comment.score || 0}}

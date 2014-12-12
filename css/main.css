@@ -15,3 +15,7 @@ body {
 #delete {
     margin-left: 10%;
 }
+
+h3 + p {
+    font-style: oblique;
+}
