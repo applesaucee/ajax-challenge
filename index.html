@@ -29,7 +29,7 @@
                 <form class="simple-form" ng-submit="addComment()" id="comment-form" method="POST" role="form">
                     <div class="rating">
                        <p>How would you rate this product?</p>
-                        <rating ng-model="newComment.rating" readOnly="isReadOnly" 
+                        <rating ng-click="hasRating()" ng-model="newComment.rating" readOnly="isReadOnly" 
                                                                     max="max" on-hover="hoveringOver(value)"></rating>
                     </div> 
                     
@@ -52,7 +52,6 @@
                     <div class="form-group btn-group">
                         <button id="submit-btn" type="submit" class="btn btn-primary">Submit Your Comment</button>
                     </div>
-                    
                 </form>
             </section>
             

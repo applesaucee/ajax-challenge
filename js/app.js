@@ -5,6 +5,7 @@
 */
 
 var baseUrl = 'https://api.parse.com/1/classes/comments';
+var rating = false;
 
 angular.module('review', ['ui.bootstrap'])
     .config(function($httpProvider) {
@@ -17,10 +18,10 @@ angular.module('review', ['ui.bootstrap'])
         $scope.max = 5;
     
         $scope.hoveringOver = function(value) {
-          $scope.overStar = value;
+            $scope.overStar = value;
         };
     
-     // to reload page
+        // to reload page
         $scope.refreshComment = function() {
             $scope.loading = true;
             $http.get(baseUrl + '?where={"done" : false}')
@@ -45,17 +46,22 @@ angular.module('review', ['ui.bootstrap'])
         $scope.newComment = {done : false};
     
         $scope.addComment = function() {
-            $scope.inserting = true;
-            $http.post(baseUrl, $scope.newComment) 
-                .success(function(responseData) {
-                    $scope.newComment.objectId = responseData.objectId;
-                    $scope.comments.push($scope.newComment);
-                    $scope.newComment = {done: false};
-                    $scope.newComment.score = 0;
-                })
-                .finally(function() {
-                    $scope.inserting = false;
-            });
+            if (rating) {
+                $scope.inserting = true;
+                $http.post(baseUrl, $scope.newComment) 
+                    .success(function(responseData) {
+                        $scope.newComment.objectId = responseData.objectId;
+                        $scope.comments.push($scope.newComment);
+                        $scope.newComment = {done: false};
+                        $scope.newComment.score = 0;
+                    })
+                    .finally(function() {
+                        $scope.inserting = false;
+                        rating = false;
+                });
+            } else {
+                // empty so that comment will not post
+            }
         }; // add comment
     
         $scope.incrementVotes = function(comment, amount) {
@@ -65,7 +71,7 @@ angular.module('review', ['ui.bootstrap'])
                         amount: amount
                     }
                 };
-
+                
                 $scope.updating = false;
                 $http.put(baseUrl + '/' + comment.objectId, postData)
                     .success(function(responseData) {
@@ -77,6 +83,7 @@ angular.module('review', ['ui.bootstrap'])
                     .finally(function() {
                         $scope.updating = false;
                     });
+                
             }; //scores
     
         $scope.deleteComment = function(comment) {
@@ -88,7 +95,8 @@ angular.module('review', ['ui.bootstrap'])
                  $scope.refreshComment();
             }, delayInMs);
         };
-    
-
            
+        $scope.hasRating = function() {
+            rating = true;
+        }
 }); // end controller
